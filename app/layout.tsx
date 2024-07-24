@@ -7,6 +7,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
+import { dark } from "@clerk/themes";
+
 import SmoothScrolling from "@/components/lenis";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,14 +23,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <ClerkProvider>
+    <ClerkProvider
+    appearance={{
+        baseTheme: dark,
+      }}>
       <html lang="en">
         <body className={inter.className}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            forcedTheme="dark"
             disableTransitionOnChange
           >
             <SmoothScrolling>{children}</SmoothScrolling>

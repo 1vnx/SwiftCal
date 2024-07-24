@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
- 
 
 const config = {
   darkMode: ["class"],
@@ -94,6 +93,10 @@ const config = {
             "background-position": "calc(100% + var(--shimmer-width)) 0",
           },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -101,6 +104,7 @@ const config = {
         "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
         spotlight: "spotlight 2s ease .75s 1 forwards",
         shimmer: "shimmer 8s infinite",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
     },
   },
@@ -115,7 +119,7 @@ function addVariablesForColors({ addBase, theme }: any) {
   let newVars = Object.fromEntries(
     Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
   );
- 
+
   addBase({
     ":root": newVars,
   });

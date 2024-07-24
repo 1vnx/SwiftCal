@@ -6,7 +6,7 @@ import Features from "./_components/features";
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden">
+    <div>
       <Header />
       <Hero />
       <Features />
