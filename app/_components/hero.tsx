@@ -21,6 +21,7 @@ export default function Hero() {
   useEffect(() => {
     setColor(theme === "dark" ? "#ffffff" : "#000000");
   }, [theme]);
+  
   return (
     <div className="w-full px-12 pt-12 flex flex-col justify-center items-center text-center">
       <Spotlight
@@ -43,10 +44,13 @@ export default function Hero() {
         few clicks.
       </p>
       <div className="mt-6">
-      <Link href="/app">
-        <Button variant={"outline"} duration={3000}>Get Started For Free</Button></Link>
+        <Link href="/app">
+          <Button variant={"outline"} duration={3000}>
+            Get Started For Free
+          </Button>
+        </Link>
       </div>
-      <div className="relative mt-[6rem] after:absolute after:inset-0 after:z-50 after:[background:linear-gradient(to_top,hsl(var(--background))_30%,transparent)] flex h-fit w-fit flex-col items-center justify-center overflow-hidden rounded-lg md:shadow-xl w-[70%]">
+      <div className="relative mt-[6rem] after:absolute after:inset-0 after:z-50 after:[background:linear-gradient(to_top,hsl(var(--background))_30%,transparent)] flex h-fit flex-col items-center justify-center overflow-hidden rounded-lg md:shadow-xl w-[80%]">
         <BorderBeam size={100} duration={10} className="z-50" />
         <Image
           src="/langfuse.png"
@@ -56,7 +60,7 @@ export default function Hero() {
           className="hidden relative w-full h-full rounded-[inherit] border object-contain dark:block"
         />
       </div>
-      
+      {/* <div className="absolute inset-0 -z-10 bg-none h-full w-full  [background:radial-gradient(150%_150%_at_50%_10%,#ffffff00_50%,#B65CFF_100%)]"></div> */}
     </div>
   );
 }
