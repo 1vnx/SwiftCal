@@ -13,3 +13,12 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  path      String   @unique
+  owner     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
