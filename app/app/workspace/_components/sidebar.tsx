@@ -47,7 +47,7 @@ export default function Sidebar() {
   return (
     <div className="hidden border-r md:block py-2 px-2 select-none">
       <div className="flex h-full max-h-screen flex-col">
-        <div className="flex h-14 items-center justify-between lg:h-[60px] lg:px-6">
+        <div className="flex h-14 items-center justify-between lg:h-[60px] px-6">
           <span>Your Workspaces</span>
           <TooltipProvider>
             <Tooltip>
@@ -69,7 +69,7 @@ export default function Sidebar() {
                 key={workspace.id}
                 href={`/app/workspace/${workspace.path}`}
                 className={cn(
-                  "flex items-center px-4 pl-4 lg:pl-6 transition-all",
+                  "flex items-center px-4 pl-6 transition-all",
                   pathname === `/app/workspace/${workspace.path}`
                     ? "text-primary"
                     : "text-muted-foreground hover:text-primary"
@@ -81,7 +81,7 @@ export default function Sidebar() {
 
             {loading &&
               [1, 2, 3].map((i) => (
-                <div key={i} className="px-4 pl-4 lg:pl-6">
+                <div key={i} className="px-4 pl-6">
                   <Skeleton className="h-5 w-40 border-muted-foreground" />
                 </div>
               ))}

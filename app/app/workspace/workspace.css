@@ -1,3 +1,55 @@
 .fc {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
+    border: none !important;
+}
+
+.fc-col-header-cell-cushion {
+    font-weight: 400 !important;
+    color: #bbbbbb !important;
+}
+
+.fc-scrollgrid-sync-inner {
+    padding: 10px !important;
+}
+
+.fc-day-today {
+    background-color: transparent !important;
+}
+
+.fc-event-main {
+    padding: 4px;
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: #171717;
+    border-color: #565656;
+}
+
+.fc .fc-button-primary {
+    background-color: #292929 !important;
+    border-color: #565656 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:active {
+    background-color: #414141!important;
+    border-color: #565656 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.5rem;
+}
+
+.fc-daygrid-day-frame:hover {
+    cursor: pointer;
+    background-color: #121212;
+}
+
+:root {
+    --fc-border-color: #262626 !important;
+    --fc-daygrid-event-dot-width: 5px !important;
 }

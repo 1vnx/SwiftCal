@@ -30,6 +30,9 @@ export async function getWorkspace(path: string, owner: string) {
       path,
       owner,
     },
+    include: {
+      events: true,
+    },
   });
 }
 
@@ -39,4 +42,22 @@ export async function getWorkspaces(owner: string) {
       owner,
     },
   });
+}
+
+export async function addEvent(
+  title: string,
+  start: Date,
+  end: Date | null,
+  workspaceId: string
+) {
+  const event = await db.event.create({
+    data: {
+      title,
+      start,
+      end,
+      workspaceId,
+    },
+  });
+
+  return event;
 }
