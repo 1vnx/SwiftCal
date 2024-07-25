@@ -48,7 +48,8 @@ export async function addEvent(
   title: string,
   start: Date,
   end: Date | null,
-  workspaceId: string
+  workspaceId: string,
+  color: string
 ) {
   const event = await db.event.create({
     data: {
@@ -56,8 +57,41 @@ export async function addEvent(
       start,
       end,
       workspaceId,
+      color,
     },
   });
 
   return event;
+}
+
+export async function editEvent(
+  eventId: string,
+  title: string,
+  start: Date,
+  end: Date | null,
+  workspaceId: string,
+  color: string
+) {
+  const event = await db.event.update({
+    where: {
+      id: eventId,
+    },
+    data: {
+      title,
+      start,
+      end,
+      workspaceId,
+      color,
+    },
+  });
+
+  return event;
+}
+
+export async function deleteEvent(eventId: string) {
+  const event = await db.event.delete({
+    where: {
+      id: eventId,
+    },
+  });
 }

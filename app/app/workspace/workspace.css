@@ -53,3 +53,11 @@
     --fc-border-color: #262626 !important;
     --fc-daygrid-event-dot-width: 5px !important;
 }
+
+.fc-event {
+    transition: all 0.2s ease-in-out;
+}
+
+.fc-event:hover {
+    opacity: 0.8 !important;
+}

@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label";
 
 import { Button } from "@/components/ui/button";
 
-import { onAddEvent } from "@/actions/workspace";
+import { onAddEvent, onEditEvent, onDeleteEvent } from "@/actions/workspace";
 
 import { toast } from "sonner";
 
@@ -51,6 +51,8 @@ import {
 } from "@prisma/client";
 import { cn } from "@/lib/utils";
 
+import { HexColorPicker } from "react-colorful";
+
 export type WorkspaceWithEvents = PrismaWorkspace & {
   events: PrismaEvent[];
 };
@@ -60,27 +62,121 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "e") {
+        event.preventDefault(); // Prevent default behavior
+        setOpen((prevOpen) => !prevOpen);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const [workspace, setWorkspace] = useState<WorkspaceWithEvents>();
 
   // Dialog States
   const [title, setTitle] = useState("");
+  const [color, setColor] = useState("#0079bf");
+  const [eventId, setEventId] = useState("");
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [isPending, startTransition] = useTransition();
+  const [editing, setEditing] = useState(false);
 
-  const handleDateClick = () => {
+  const handleDateClick = (args: any) => {
+    setStartDate(formatDate(args.date));
     setOpen(true);
   };
 
   function handleAddEvent() {
     startTransition(() => {
-      if (title && startDate && endDate && workspace) {
-        onAddEvent(title, startDate, endDate, workspace.path)
+      if (title && startDate && color && workspace) {
+        onAddEvent(title, startDate, endDate ?? null, workspace.id, color)
           .then((data) => {
             toast.success("Event Added successfully", {
               duration: 2000,
             });
             setOpen(false);
+            setTitle("");
+            setEventId("");
+            setStartDate(undefined);
+            setEndDate(undefined);
+            setColor("#0079bf");
+            if (workspace) {
+              setWorkspace({
+                ...workspace,
+                events: [...workspace.events, data],
+              });
+            }
+          })
+          .catch((error) =>
+            toast.error(error.message, {
+              duration: 2000,
+            })
+          );
+      }
+    });
+  }
+
+  function handleEditEvent(eventId: string) {
+    startTransition(() => {
+      if (title && startDate && color && workspace) {
+        onEditEvent(eventId, title, startDate, endDate ?? null, workspace.id, color)
+          .then((data) => {
+            toast.success("Event Edited successfully", {
+              duration: 2000,
+            });
+            setOpen(false);
+            setTitle("");
+            setEventId("");
+            setStartDate(undefined);
+            setEndDate(undefined);
+            setColor("#0079bf");
+            if (workspace) {
+              setWorkspace({
+                ...workspace,
+                events: workspace.events.map((event) =>
+                  event.id === data.id ? data : event
+                ),
+              });
+            }
+            setEditing(false);
+          })
+          .catch((error) =>
+            toast.error(error.message, {
+              duration: 2000,
+            })
+          );
+      }
+    });
+  }
+
+  function handleDeleteEvent(eventId: string) {
+    startTransition(() => {
+      if (workspace) {
+        onDeleteEvent(eventId)
+          .then(() => {
+            toast.success("Event Deleted successfully", {
+              duration: 2000,
+            });
+            setOpen(false);
+            setTitle("");
+            setEventId("");
+            setStartDate(undefined);
+            setEndDate(undefined);
+            setColor("#0079bf");
+            if (workspace) {
+              setWorkspace({
+                ...workspace,
+                events: [],
+              });
+            }
+            setEditing(false);
           })
           .catch((error) =>
             toast.error(error.message, {
@@ -108,6 +204,16 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
     ? transformEvents(workspace.events)
     : [];
 
+  const handleEventClick = (info: any) => {
+    setTitle(info.event.title);
+    setStartDate(info.event.start);
+    setEndDate(info.event.end);
+    setEventId(info.event.id);
+    setColor(info.event.backgroundColor);
+    setOpen(true);
+    setEditing(true);
+  };
+
   if (loading) {
     return (
       <div className="w-full px-8 lg:px-12 pt-8 select-none">
@@ -130,6 +236,7 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
         dateClick={handleDateClick}
         events={fullCalendarEvents}
         eventContent={renderEventContent}
+        eventClick={handleEventClick}
         buttonText={{
           today: "Today",
         }}
@@ -137,9 +244,9 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Event</DialogTitle>
+            <DialogTitle>{editing ? "Edit Event" : "Add Event"}</DialogTitle>
             <DialogDescription>
-              Add a new event to your calendar.
+              {editing ? "Edit your event." : "Add an event to your calendar."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -150,6 +257,7 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
               <Input
                 className="col-span-3"
                 disabled={isPending}
+                value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
@@ -186,7 +294,6 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">End Date</Label>
-
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -200,7 +307,7 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
                     {endDate ? (
                       format(endDate, "PPP")
                     ) : (
-                      <span>Pick a date</span>
+                      <span>Pick a date (Optional)</span>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -215,11 +322,55 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
                 </PopoverContent>
               </Popover>
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Color
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[280px] justify-start text-left font-normal",
+                      !endDate && "text-muted-foreground"
+                    )}
+                  >
+                    <span>{color}</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <HexColorPicker color={color} onChange={setColor} />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isPending} onClick={handleAddEvent}>
-              Add Event
-            </Button>
+            {editing ? (
+              <>
+                <Button
+                  variant={"destructive"}
+                  onClick={(e) => handleDeleteEvent(eventId)}
+                  disabled={isPending}
+                >
+                  Delete
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  onClick={(e) => handleEditEvent(eventId)}
+                >
+                  Edit Event
+                </Button>
+              </>
+            ) : (
+              <Button
+                type="submit"
+                disabled={isPending}
+                onClick={handleAddEvent}
+              >
+                Add Event
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -232,6 +383,7 @@ interface FullCalendarEvent {
   title: string;
   start: Date | string;
   end?: Date | string;
+  color: string;
 }
 
 const transformEvent = (event: PrismaEvent): FullCalendarEvent => {
@@ -240,6 +392,7 @@ const transformEvent = (event: PrismaEvent): FullCalendarEvent => {
     title: event.title,
     start: event.start.toISOString(), // Convert DateTime to ISO string
     end: event.end?.toISOString(), // Convert DateTime to ISO string if it exists
+    color: event.color,
   };
 };
 
@@ -254,3 +407,7 @@ function renderEventContent(eventInfo: any) {
     </>
   );
 }
+
+const formatDate = (date: any) => {
+  return date.toISOString();
+};
