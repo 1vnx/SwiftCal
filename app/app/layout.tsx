@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { auth } from "@clerk/nextjs/server";
+import Header from "./_components/header";
 
 export const metadata: Metadata = {
   title: "Dashboard - SwiftCal",
@@ -14,5 +15,10 @@ export default async function Layout({
 }) {
   auth().protect();
 
-  return <>{children}</>;
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
 }

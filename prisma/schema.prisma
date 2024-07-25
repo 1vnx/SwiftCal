@@ -13,3 +13,29 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  path      String   @unique
+  owner     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events Event[] @relation("WorkspaceEvents")
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  start       DateTime
+  end         DateTime?
+  workspaceId String
+  color       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  workspace Workspace @relation("WorkspaceEvents", fields: [workspaceId], references: [id])
+
+  @@index([workspaceId])
+}

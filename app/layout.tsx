@@ -11,6 +11,8 @@ import { dark } from "@clerk/themes";
 
 import SmoothScrolling from "@/components/lenis";
 
+import { Toaster } from "sonner";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,12 +25,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <ClerkProvider
-    appearance={{
+      appearance={{
         baseTheme: dark,
-      }}>
+      }}
+    >
       <html lang="en">
         <body className={inter.className}>
           <ThemeProvider
@@ -37,7 +39,10 @@ export default function RootLayout({
             forcedTheme="dark"
             disableTransitionOnChange
           >
-            <SmoothScrolling>{children}</SmoothScrolling>
+            <SmoothScrolling>
+              <Toaster />
+              {children}
+            </SmoothScrolling>
           </ThemeProvider>
         </body>
       </html>
