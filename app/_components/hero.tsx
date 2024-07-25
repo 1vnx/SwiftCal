@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Spotlight } from "@/components/ui/spotlight";
 
@@ -15,15 +12,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/moving-border";
 
 export default function Hero() {
-  const { theme } = useTheme();
-  const [color, setColor] = useState("#ffffff");
 
-  useEffect(() => {
-    setColor(theme === "dark" ? "#ffffff" : "#000000");
-  }, [theme]);
-  
   return (
-    <div className="w-full px-12 pt-12 flex flex-col justify-center items-center text-center">
+    <div className="w-full px-8 lg:px-12 pt-12 flex flex-col justify-center items-center text-center">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="white"
@@ -32,10 +23,10 @@ export default function Hero() {
         className="absolute inset-0 -z-[2]"
         quantity={100}
         ease={80}
-        color={color}
+        color="#ffffff"
         refresh
       />
-      <h1 className="text-4xl w-[95%] lg:text-5xl lg:w-[60%] lg:leading-tight bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text text-transparent font-medium tracking-tighter text-balance">
+      <h1 className="text-4xl w-[95%] lg:text-5xl lg:w-[60%] lg:leading-tight bg-gradient-to-br dark:from-white from-30% dark:to-white/40 bg-clip-text text-transparent font-medium tracking-tighter text-balance">
         Your Hassle-Free Solution for Managing Appointments
       </h1>
       <p className="lg:w-[50%] mt-4 leading-relaxed text-muted-foreground">

@@ -5,7 +5,10 @@ export default function AppLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="flex justify-center items-center flex-1">
-            <Header />
-    {children}</div>;
+  return (
+    <>
+      <Header />
+      <div className="flex justify-center items-center flex-1">{children}</div>
+    </>
+  );
 }
