@@ -9,8 +9,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import { dark } from "@clerk/themes";
 
-import SmoothScrolling from "@/components/lenis";
-
 import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -39,10 +37,8 @@ export default function RootLayout({
             forcedTheme="dark"
             disableTransitionOnChange
           >
-            <SmoothScrolling>
               <Toaster />
               {children}
-            </SmoothScrolling>
           </ThemeProvider>
         </body>
       </html>
