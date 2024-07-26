@@ -126,7 +126,14 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
   function handleEditEvent(eventId: string) {
     startTransition(() => {
       if (title && startDate && color && workspace) {
-        onEditEvent(eventId, title, startDate, endDate ?? null, workspace.id, color)
+        onEditEvent(
+          eventId,
+          title,
+          startDate,
+          endDate ?? null,
+          workspace.id,
+          color
+        )
           .then((data) => {
             toast.success("Event Edited successfully", {
               duration: 2000,
@@ -173,7 +180,9 @@ export default function WorkspacePage({ params }: WorkspaceProps) {
             if (workspace) {
               setWorkspace({
                 ...workspace,
-                events: [],
+                events: workspace.events.filter(
+                  (event) => event.id !== eventId
+                ),
               });
             }
             setEditing(false);
