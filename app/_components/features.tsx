@@ -11,32 +11,32 @@ import Link from "next/link";
 export default function Features() {
   const features = [
     {
-      title: "Track issues effectively",
+      title: "Multiple Workspaces",
       description:
-        "Track and manage your project issues with ease using our intuitive interface.",
+        "Create and manage multiple workspaces to organize different types of events and appointments.",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Capture pictures with AI",
+      title: "Event Customization",
       description:
-        "Capture stunning photos effortlessly using our advanced AI technology.",
+        "Tailor your events to fit your specific needs with our customizable options.",
       skeleton: <SkeletonTwo />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
-      title: "Watch our AI on YouTube",
+      title: "Secured Authentication",
       description:
-        "Whether its you or Tyler Durden, you can get to know about our product on YouTube",
+        "Rest assured that your data is safe with our secured authentication system.",
       skeleton: <SkeletonThree />,
       className:
         "col-span-1 lg:col-span-3 lg:border-r  dark:border-neutral-800",
     },
     {
-      title: "Deploy in seconds",
+      title: "Fast and Efficient",
       description:
-        "With our blazing fast, state of the art, cutting edge, we are so back cloud servies (read AWS) - you can deploy your model in seconds.",
+        "Schedule and manage your appointments quickly, ensuring that your planning process is smooth and time-efficient.",
       skeleton: <SkeletonFour />,
       className: "col-span-1 lg:col-span-3 border-b lg:border-none",
     },
